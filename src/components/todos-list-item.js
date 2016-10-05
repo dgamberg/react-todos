@@ -10,11 +10,41 @@ export default class TodosListItem extends React.Component{
         }
     }
 
+    renderTaskSection(){
+
+        const { task, isCompleted } = this.props;
+
+        console.log(this.props);
+
+        const taskStyle = {
+            color: isCompleted ? 'green' : 'red',
+            cursor: 'pointer'
+        };
+
+        if(this.state.isEditing){
+
+            return (
+                <td>
+                    <form onSubmit={ this.onSaveClick.bind(this) }>
+                        <input type="text" defaultValue={task} ref="editInput"/>
+                    </form>
+                </td>
+            );
+        }
+
+        return (
+            <td style={ taskStyle }
+                onClick={this.props.toggleTask.bind(this, task)}>
+                { task }
+            </td>
+        )
+    }
+
     renderActionsSection(){
         if(this.state.isEditing){
             return (
                 <td>
-                    <button>Save</button>
+                    <button onClick={ this.onSaveClick.bind(this)} >Save</button>
                     <button onClick={ this.OnCancelClick.bind(this) }>Cancel</button>
                 </td>
             );
@@ -35,20 +65,29 @@ export default class TodosListItem extends React.Component{
         return (
 
             <tr>
-               <td>{ this.props.task } </td>
-                { this.renderActionsSection() }
+               <td>{ this.renderTaskSection() } </td>
+                <td>{ this.renderActionsSection() }</td>
             </tr>
         )
     }
 
-
-
     onEditClick(){
         this.setState({ isEditing: true });
     }
+
     OnCancelClick(){
         this.setState({
             isEditing: false 
         })
+    }
+    onSaveClick(event){
+        event.preventDefault();
+
+        const oldTask = this.props.task;
+        const newTask = this.refs.editInput.value;
+        this.props.saveTask( oldTask , newTask);
+
+        this.setState({ isEditing: false });
+
     }
 }
