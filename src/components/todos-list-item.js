@@ -53,17 +53,14 @@ export default class TodosListItem extends React.Component{
         return(
             <td>
                 <button onClick={ this.onEditClick.bind(this) } >Edit</button>
-                <button>Delete</button>
+                <button onClick={ this.props.deleteTask.bind(this, this.props.task) }>Delete</button>
             </td>
         );
     }
 
     render(){
 
-        console.log(this.props);
-
         return (
-
             <tr>
                <td>{ this.renderTaskSection() } </td>
                 <td>{ this.renderActionsSection() }</td>
@@ -88,6 +85,5 @@ export default class TodosListItem extends React.Component{
         this.props.saveTask( oldTask , newTask);
 
         this.setState({ isEditing: false });
-
     }
 }
